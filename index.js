@@ -14,7 +14,7 @@ export class TimeManager {
 	/**
 	 * Функция проверяет, находится ли указанное время(time) в нужном интервале (interval)
 	 * @param time {Date)
-	 * @param interval {Array}
+	 * @param interval {Array} - массив из двух дат для сравнения
 	 * @returns {boolean}
 	 */
 	static is_inTimeInterval( time, interval ) {
@@ -42,7 +42,7 @@ export class TimeManager {
 	}
 
 	/**
-	 * Сравнение времени, является ли одно время больше другого?
+	 * Сравнение времени: является ли одно время больше другого?
 	 * @param whichTime
 	 * @param thanTime
 	 * @returns {boolean}
@@ -116,6 +116,7 @@ export class TimeManager {
 	 * @returns {*}
 	 */
 	static getTime( dates, type ) {
+		// доступные типы для получения из массива - большее время и меньшее время
 		const available_types = [
 			"higher",
 			"lower"
@@ -139,6 +140,7 @@ export class TimeManager {
 	 * @returns {string}
 	 */
 	static TimeToString( date ) {
+		// если дата находится не в подходящем формате
 		if ( !this.isDatePrepared( date ) ) {
 			if ( !date instanceof Date ) {
 				return false;
@@ -158,6 +160,7 @@ export class TimeManager {
 	 * @returns {boolean}
 	 */
 	static isDatePrepared( date ) {
+		// требуемые свойства
 		const properties = [
 			"hours",
 			"minutes",
