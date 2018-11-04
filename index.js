@@ -8,13 +8,13 @@ export class TimeManager {
 	 * @returns {{hours : number, minutes : number, seconds : number}}
 	 */
 	static thisTime() {
-		return this.prepareDate( new Date() );
+		return this.prepareTime( new Date() );
 	}
 
 	/**
 	 * Функция проверяет, находится ли указанное время(time) в нужном интервале (interval)
 	 * @param time {Date)
-	 * @param interval {Array} - массив из двух дат для сравнения
+	 * @param interval {Array}
 	 * @returns {boolean}
 	 */
 	static is_inTimeInterval( time, interval ) {
@@ -31,10 +31,10 @@ export class TimeManager {
 		const higher_time = this.getTime( interval, "higher" );
 		const lower_time  = this.getTime( interval, "lower" );
 		if ( this.isHigher( higher_time, time ) && this.isLower( lower_time, time ) ) {
-			console.log( this.TimeToString( time ) + ' between ' + this.TimeToString( lower_time ) + ' and ' + this.TimeToString( higher_time ) );
+			//console.log( this.TimeToString( time ) + ' between ' + this.TimeToString( lower_time ) + ' and ' + this.TimeToString( higher_time ) );
 			return true;
 		}
-		console.log( this.TimeToString( time ) + 'not between ' + this.TimeToString( lower_time ) + ' and ' + this.TimeToString( higher_time ) );
+		//console.log( this.TimeToString( time ) + ' not between ' + this.TimeToString( lower_time ) + ' and ' + this.TimeToString( higher_time ) );
 
 		return false;
 
@@ -42,7 +42,7 @@ export class TimeManager {
 	}
 
 	/**
-	 * Сравнение времени: является ли одно время больше другого?
+	 * Сравнение времени, является ли одно время больше другого?
 	 * @param whichTime
 	 * @param thanTime
 	 * @returns {boolean}
@@ -55,6 +55,7 @@ export class TimeManager {
 
 		return whichTime > thanTime;
 	}
+
 	/**
 	 * Сравнение времени, является ли одно время меньше другого?
 	 * @param whichTime
@@ -88,7 +89,7 @@ export class TimeManager {
 		// готовим время в нужном формате
 		dates.forEach( ( date, index ) => {
 
-			prepared_dates[ index ]   = this.prepareDate( date );
+			prepared_dates[ index ]   = this.prepareTime( date );
 			dates_to_compare[ index ] = this.TimeToString( prepared_dates[ index ] );
 
 
@@ -116,7 +117,6 @@ export class TimeManager {
 	 * @returns {*}
 	 */
 	static getTime( dates, type ) {
-		// доступные типы для получения из массива - большее время и меньшее время
 		const available_types = [
 			"higher",
 			"lower"
@@ -140,12 +140,11 @@ export class TimeManager {
 	 * @returns {string}
 	 */
 	static TimeToString( date ) {
-		// если дата находится не в подходящем формате
 		if ( !this.isDatePrepared( date ) ) {
 			if ( !date instanceof Date ) {
 				return false;
 			}
-			date = this.prepareDate( date );
+			date = this.prepareTime( date );
 
 		}
 		let values = [];
@@ -160,7 +159,6 @@ export class TimeManager {
 	 * @returns {boolean}
 	 */
 	static isDatePrepared( date ) {
-		// требуемые свойства
 		const properties = [
 			"hours",
 			"minutes",
@@ -194,7 +192,7 @@ export class TimeManager {
 	 * @param date
 	 * @returns {*}
 	 */
-	static prepareDate( date ) {
+	static prepareTime( date ) {
 		// если передана некорректная дата
 		if ( !date instanceof Date ) {
 			return false;
@@ -207,5 +205,31 @@ export class TimeManager {
 		};
 
 	}
+
+	/**
+	 * Функция собирает сегодняшнюю дату + время из строки
+	 * @param string_time
+	 * @param delimiter
+	 * @returns {*}
+	 */
+	static parseTimeFromString( string_time, delimiter ) {
+		if ( 'string' !== typeof string_time ) {
+			return false;
+		}
+		if ( undefined === delimiter ) {
+			delimiter = ':';
+		}
+		let time_array = string_time.split( delimiter );
+		const today    = new Date();
+		if ( time_array.length < 2 || time_array.length > 3 ) {
+			return false;
+		}
+		time_array.length === 2 ? time_array.push( '00' ) : true;
+
+		return new Date( today.getFullYear(), today.getMonth(), today.getDate(), time_array[ 0 ], time_array[ 1 ], time_array[ 2 ] );
+
+	}
+
+
 
 }
