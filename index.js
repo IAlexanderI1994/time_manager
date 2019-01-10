@@ -229,7 +229,4 @@ export class TimeManager {
 		return new Date( today.getFullYear(), today.getMonth(), today.getDate(), time_array[ 0 ], time_array[ 1 ], time_array[ 2 ] );
 
 	}
-
-
-
 }
